@@ -3,3 +3,7 @@
 ################################################################################
 
 /bin
+/.vs
+/obj
+/appsettings.json
+/appsettings.Development.json
