@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace DatingApp.Interfaces
 {
-    interface IPhotoService
+    public interface IPhotoService
     {
         Task<ImageUploadResult> AddPhotoAsync(IFormFile file);
         Task<DeletionResult> DeletePhotoAsync(string publicId);

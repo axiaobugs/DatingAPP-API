@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using DatingApp.DTOs;
+using DatingApp.Extensions;
 using DatingApp.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DatingApp.Controllers
@@ -49,8 +49,7 @@ namespace DatingApp.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userRepository.GetUserByUserNameAsync(username);
+            var user = await _userRepository.GetUserByUserNameAsync(User.GetUsername());
             _mapper.Map(memberUpdateDto, user);
             _userRepository.Update(user);
 
@@ -61,6 +60,8 @@ namespace DatingApp.Controllers
 
             return BadRequest("Fail to update user");
         }
+
+        [HttpPost]
 
 
 

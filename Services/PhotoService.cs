@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CloudinaryDotNet;
@@ -14,8 +15,7 @@ namespace DatingApp.Services
     public class PhotoService:IPhotoService
     {
 
-
-        private readonly Cloudinary _cloudinary;
+        private readonly Cloudinary _couCloudinary;
 
         public PhotoService(IOptions<CloudinarySettings> config)
         {
@@ -25,30 +25,30 @@ namespace DatingApp.Services
                 config.Value.ApiKey,
                 config.Value.ApiSecret
             );
-            _cloudinary = new Cloudinary(acc);
+            _couCloudinary = new Cloudinary(acc);
         }
+
 
         public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
         {
             var uploadResult = new ImageUploadResult();
-            if (file.Length > 0)
+            if (file.Length >0)
             {
                 await using var stream = file.OpenReadStream();
-                var uploadParams = new ImageUploadParams()
+                var uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(file.FileName, stream),
+                    File = new FileDescription(file.FileName,stream),
                     Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
                 };
-                uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                uploadResult = await _couCloudinary.UploadAsync(uploadParams);
             }
-
             return uploadResult;
         }
 
         public async Task<DeletionResult> DeletePhotoAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);
-            var result = await _cloudinary.DestroyAsync(deleteParams);
+            var result = await _couCloudinary.DestroyAsync(deleteParams);
             return result;
         }
     }
