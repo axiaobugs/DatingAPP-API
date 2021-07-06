@@ -2,6 +2,7 @@
 using DatingApp.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DatingApp.Helpers;
 
 namespace DatingApp.Interfaces
 {
@@ -12,7 +13,7 @@ namespace DatingApp.Interfaces
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetUserById(int id);
         Task<AppUser> GetUserByUserNameAsync(string username);
-        Task<IEnumerable<MemberDto>> GetMembersAsync();
+        Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
         Task<MemberDto> GetMemberAsync(string username);
     }
 }
