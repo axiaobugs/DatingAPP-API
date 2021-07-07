@@ -30,7 +30,7 @@ namespace DatingApp.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //
+            //declare composite primary key    sourceUserId $ likeUserId
             builder.Entity<UserLike>()
                 .HasKey(k => new {k.SourceUserId, k.LikedUserId});
             //
