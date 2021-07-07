@@ -43,5 +43,8 @@ namespace DatingApp.Entities
         
         public ICollection<UserLike> LikedUsers { get; set; }
 
+        public ICollection<Message> MessageSent { get; set; }
+        public ICollection<Message> MessageRecived { get; set; }
+
     }
 }
