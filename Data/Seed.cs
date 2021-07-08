@@ -1,31 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
+﻿using DatingApp.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
-using DatingApp.Entities;
 
 namespace DatingApp.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(DataContext context)
+        public static async Task SeedUsers(UserManager<AppUser> userManager)
         {
-            if (await context.Users.AnyAsync())
-            {
-                return;
-            }
-
+            if (await userManager.Users.AnyAsync()) return;
+            
             var userDate = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
             var users = JsonSerializer.Deserialize<List<AppUser>>(userDate);
+
+            if (users==null) return;
+            
+
             foreach (var user in users)
             {
                 user.UserName = user.UserName.ToLower();
-                context.Add(user);
+                await userManager.CreateAsync(user,"Pa$$0rd");
             }
 
-            await context.SaveChangesAsync();
         }
     }
 }
