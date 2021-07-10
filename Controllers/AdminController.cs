@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DatingApp.Entities;
+﻿using DatingApp.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DatingApp.Controllers
 {
@@ -32,7 +30,7 @@ namespace DatingApp.Controllers
                 {
                     u.Id,
                     Username = u.UserName,
-                    Role=u.UserRoles.Select(r=>r.Role.Name).ToList()
+                    Roles=u.UserRoles.Select(r=>r.Role.Name).ToList()
 
                 })
                 .ToListAsync();

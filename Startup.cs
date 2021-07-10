@@ -4,6 +4,7 @@ using DatingApp.Extensions;
 using DatingApp.Interfaces;
 using DatingApp.Middleware;
 using DatingApp.Services;
+using DatingApp.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ namespace DatingApp
             services.AddControllers();
             services.AddCors();
             services.AddIdentityServices(Configuration);
+            services.AddSignalR();
 
         }
 
@@ -54,6 +56,7 @@ namespace DatingApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PresenceHub>("hubs/presence");
             });
         }
     }

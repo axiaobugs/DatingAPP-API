@@ -1,8 +1,8 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using DatingApp.DTOs;
 using DatingApp.Entities;
 using DatingApp.Extensions;
+using DatingApp.Helpers;
 using DatingApp.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DatingApp.Helpers;
 
 namespace DatingApp.Controllers
 {
@@ -29,7 +28,7 @@ namespace DatingApp.Controllers
             _photoService = photoService;
         }
 
-        [Authorize(Roles = "Admin")]
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
