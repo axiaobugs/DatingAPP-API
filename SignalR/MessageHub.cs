@@ -5,6 +5,7 @@ using DatingApp.Extensions;
 using DatingApp.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,12 +16,20 @@ namespace DatingApp.SignalR
         private readonly IMessageRepository _messageRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IHubContext<PresenceHub> _presenceHub;
+        private readonly PresenceTracker _presenceTracker;
 
-        public MessageHub(IMessageRepository messageRepository,IMapper mapper,IUserRepository userRepository)
+        public MessageHub(IMessageRepository messageRepository,
+            IMapper mapper,
+            IUserRepository userRepository,
+            IHubContext<PresenceHub> presenceHub,
+            PresenceTracker presenceTracker)
         {
             _messageRepository = messageRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _presenceHub = presenceHub;
+            _presenceTracker = presenceTracker;
         }
 
         public override async Task OnConnectedAsync()
@@ -70,10 +79,25 @@ namespace DatingApp.SignalR
             var groupName = GetGroupName(sender.UserName, recipient.UserName);
             var group = await _messageRepository.GetMessageGroup(groupName);
 
+            // if sender and recipient in the same group
             if (group.Connections.Any(x=>x.Username == recipient.UserName))
             {
                 message.DateRead = DateTime.UtcNow;
             }
+            // else not in the same group that means one of user offline or not in the message tab
+            else
+            {
+                var connections = await _presenceTracker.GetConnectionForUser(recipient.UserName);
+                if (connections != null)
+                {
+                    await _presenceHub.Clients.Clients((IReadOnlyList<string>)connections).SendAsync("NewMessageReceived", new
+                    {
+                        username = sender.UserName,
+                        knownAs = sender.KnownAs,
+                    });
+                }
+            }
+
             // add message to database
             _messageRepository.AddMessage(message);
             if (await _messageRepository.SaveAllAsync())

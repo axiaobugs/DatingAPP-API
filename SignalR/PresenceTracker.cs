@@ -50,5 +50,16 @@ namespace DatingApp.SignalR
 
             return Task.FromResult(onlineUsers);
         }
+
+        public async Task<IList<string>> GetConnectionForUser(string username)
+        {
+            List<string> connectionIds;
+            lock (OnlineUsers)
+            {
+                connectionIds = OnlineUsers.GetValueOrDefault(username);
+            }
+
+            return await Task.FromResult(connectionIds);
+        }
     }
 }
