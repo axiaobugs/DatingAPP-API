@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DatingApp.SignalR
 {
+    /// <summary>
+    /// Members Online Status
+    /// </summary>
     [Authorize]
     public class PresenceHub : Hub
     {
