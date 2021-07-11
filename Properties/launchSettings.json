@@ -18,7 +18,7 @@
       }
     },
     "DatingApp": {
-      "commandName": "Executable",
+      "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/",
       "environmentVariables": {
