@@ -5,7 +5,6 @@ using DatingApp.Extensions;
 using DatingApp.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,6 +35,7 @@ namespace DatingApp.SignalR
             // get request fetch 'user'
             var otherUser = httpContext.Request.Query["user"].ToString();
             var groupName = GetGroupName(Context.User.GetUsername(), otherUser);
+            // add this group to the database
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             // get the group
             var group = await AddGroup(groupName);
@@ -140,8 +140,5 @@ namespace DatingApp.SignalR
             if (await _unitOfWork.Complete()) return group;
             throw new HubException("Failed to remove from group");
         }
-
-
-
     }
 }
